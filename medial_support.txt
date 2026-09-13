@@ -1,0 +1,85 @@
+# AstroSet - Marketing Support
+
+## Application Title
+AstroSet - Daily Cosmic Events & Weather
+
+## Short Description
+Your daily guide to Vedic and Western astrology, planetary alignment charts, moon events, solar activity, space weather, and forecasts - all in one beautiful Android app.
+
+## Long Description
+AstroSet is a comprehensive daily events application that brings together astrology, planetary tracking, solar activity, space weather, and terrestrial forecasts to keep you informed about the cosmos and your environment. Available for Android mobile.
+
+**Astrology Events:**
+- Interactive Planetary Alignment Chart - a zodiac wheel showing live positions of all 10 planets (Sun through Pluto) with degrees, signs, and retrograde markers
+- Daily Vedic Panchang (tithi, nakshatra, karana)
+- Western daily horoscopes
+- Moon phases with precise illumination percentage and age
+- Upcoming Moon Events - full moons, new moons, quarters, perigee and apogee dates for the next 30 days
+- Upcoming Planetary Events - retrograde stations and sign ingresses for the next 30 days
+
+**Solar & Space Weather:**
+- Real-time solar flare detection from NOAA GOES-18 X-ray data with class magnitudes (C, M, X)
+- 7-day X-ray flux area chart with flare-class threshold lines on a log scale
+- Geomagnetic storm tracking (G1-G5 scale)
+- Kp index with severity indicators
+- Aurora visibility forecasts
+- Live solar wind speed, density, temperature, and IMF Bz (GSM) with sample timestamps
+- Schumann Resonance monitor - live Earth-ionosphere spectrogram from Tomsk State University plus a composite Activity Index (0-100) with plain-language interpretation
+
+**Weather Forecasts:**
+- 7-day detailed forecasts
+- UV index with safety level indicators
+- Precipitation chances and wind speed
+- Hourly forecast details
+
+**Smart Features:**
+- Automatic refresh every 30 minutes with countdown
+- Offline caching - your last data is always available, even without internet
+- Your settings are saved - location, zodiac sign and preferences persist between sessions
+- Custom location settings with latitude/longitude
+- Clean dark-space themed interface
+- Pull-to-refresh on mobile
+- Built-in Privacy Policy screen
+
+AstroSet is designed for astrology enthusiasts, stargazers, aurora hunters, photographers planning golden-hour shoots, health-conscious users tracking UV exposure, and anyone curious about the connection between cosmic activity and daily life. Planetary positions and moon events are computed on-device with precision astronomy algorithms, while live space weather comes from NOAA Space Weather Prediction Center and NASA, weather from Open-Meteo, and horoscopes from dedicated astrology services. AstroSet is completely free to use with no ads.
+
+## Facebook Promotional Text
+🌌 Ever wondered what the cosmos has in store for you TODAY? Meet AstroSet! ✨
+
+AstroSet brings the universe to your fingertips - one beautiful app that combines:
+
+🪐 A live Planetary Alignment Chart - see exactly where every planet sits in the zodiac right now
+🌙 Upcoming Full Moons, New Moons & lunar perigee dates
+℞ Retrograde alerts and planet sign changes before they happen
+🕉️ Vedic Panchang & Western horoscopes
+⚡ Real-time solar flare tracking with a stunning 7-day X-ray chart
+🌊 Aurora visibility forecasts
+🌤️ 7-day weather with UV index
+
+Whether you're planning your day by the stars, hunting for the northern lights, timing rituals to the moon, or just love knowing what's happening in space - AstroSet has you covered!
+
+✅ FREE to use
+✅ Available on Android (Google Play)
+✅ Offline mode - your data is there even without internet
+✅ Remembers your settings on every device
+✅ Auto-refreshes so you're always up to date
+
+Download AstroSet today and never miss a cosmic event again! 🚀
+
+#AstroSet #Astrology #SpaceWeather
+
+## Social Media Tags
+#AstroSet #Astrology #Horoscope #VedicAstrology #Panchang #MoonPhase #FullMoon #NewMoon #Retrograde #PlanetaryAlignment #ZodiacChart #SolarFlare #SpaceWeather #AuroraForecast #GeomagneticStorm #SchumannResonance #EarthFrequency #UVIndex #WeatherApp #Stargazing #AuroraHunting #DailyHoroscope
+
+## AI Image Prompts
+1. A stunning digital illustration of a golden zodiac wheel chart floating in deep space, ten glowing planets positioned around the circular astrological ring with constellation glyphs, crescent moon and scattered stars against a deep navy-purple sky, modern flat design style, app aesthetic, centered composition.
+
+2. A person standing on a mountain peak at night holding up a smartphone whose screen shows a glowing circular planetary chart, while aurora borealis dances in green and purple waves across the star-filled sky above, cinematic lighting, sense of wonder and connection between technology and cosmos.
+
+3. A split-scene composition showing a serene meditation space at dawn with incense and a Vedic panchang calendar on one side, and a high-tech space weather monitoring station with a glowing orange solar flux graph on screen on the other, unified by warm sunrise light, photorealistic style.
+
+4. Close-up of a smartphone in hand displaying a beautiful dark-themed astronomy dashboard with a circular zodiac wheel, moon phase icons, and an orange area chart of solar activity, with a real full moon softly blurred in the background twilight sky, product photography style, crisp and modern.
+
+5. An artistic flat-lay of a photographer's gear - camera, tripod, thermos - on a wooden deck overlooking a lake at twilight, with a laptop showing an aurora forecast and planetary retrograde calendar, and the first stars appearing in a gradient orange-to-navy sky, cozy adventurous mood, lifestyle photography.
+
+6. A mesmerizing visualization of Earth's electromagnetic heartbeat: glowing concentric wave rings emanating from the planet at 7.83 Hz frequency bands, with a live scientific spectrogram panel showing colorful resonance patterns in green and amber against the dark of space, modern data-visualization aesthetic.

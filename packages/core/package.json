@@ -1,0 +1,18 @@
+{
+  "name": "@astroset/core",
+  "version": "1.3.1",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint src/",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "astronomy-engine": "^2.1.19"
+  }
+}

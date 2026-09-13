@@ -1,0 +1,22 @@
+node_modules/
+dist/
+build/
+.expo/
+*.tsbuildinfo
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
+*.keystore
+keystore.properties
+credentials.txt
+local.properties
+apps/mobile/android/.gradle/
+apps/mobile/android/.kotlin/
+apps/mobile/android/.cxx/
+release/*.apk
+release/*.aab
+release/*-mapping.txt
+# Stray copy of Windows cmd.exe locked in repo root (see AGENTS.md Mod 035)
+/cmd.exe

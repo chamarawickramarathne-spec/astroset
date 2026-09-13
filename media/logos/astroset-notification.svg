@@ -1,0 +1,17 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="horizonClip">
+      <rect x="0" y="0" width="1024" height="668"/>
+    </clipPath>
+    <mask id="crescentMask">
+      <rect x="0" y="0" width="1024" height="1024" fill="white"/>
+      <circle cx="362" cy="256" r="92" fill="black"/>
+    </mask>
+  </defs>
+
+  <g clip-path="url(#horizonClip)">
+    <circle cx="512" cy="668" r="212" fill="#ffffff"/>
+  </g>
+
+  <circle cx="316" cy="298" r="106" fill="#ffffff" mask="url(#crescentMask)"/>
+</svg>

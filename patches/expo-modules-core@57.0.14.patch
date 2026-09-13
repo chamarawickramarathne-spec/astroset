@@ -1,0 +1,16 @@
+diff --git a/android/build.gradle b/android/build.gradle
+index 44dd09344b9c22f35cb9d23a3030c64e37907c61..359207fb7f26cf3417b2e2b58645555e79d7c4b4 100644
+--- a/android/build.gradle
++++ b/android/build.gradle
+@@ -61,7 +61,10 @@ USE_HERMES = USE_HERMES && isExpoModulesCoreTests
+ 
+ def shouldTurnWarningsIntoErrors = findProperty("EXPO_TURN_WARNINGS_INTO_ERRORS") == "true"
+ 
+-def enableWorkletsIntegration = !isTests
++// AstroSet: expo-modules-core 57.0.14 worklet C++ calls runtime->executeSync() which
++// no longer exists in react-native-worklets 0.12.1 (renamed to runSync). The app uses
++// react-native-reanimated's worklets, not expo's, so expo worklets integration is disabled.
++def enableWorkletsIntegration = false
+ def workletsProject = enableWorkletsIntegration ? findProject(":react-native-worklets") : null
+ 
+ if (workletsProject != null) {

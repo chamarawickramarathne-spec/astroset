@@ -1,0 +1,28 @@
+{
+  "name": "astroset",
+  "version": "1.3.1",
+  "private": true,
+  "description": "Daily astrology, solar events, and weather app (Android)",
+  "scripts": {
+    "dev": "pnpm --filter @astroset/mobile start",
+    "start": "pnpm --filter @astroset/mobile start",
+    "android": "pnpm --filter @astroset/mobile android",
+    "build:core": "pnpm --filter @astroset/core build",
+    "typecheck": "pnpm --filter @astroset/mobile exec tsc --noEmit",
+    "lint": "turbo lint",
+    "clean": "turbo clean"
+  },
+  "devDependencies": {
+    "turbo": "^2.4.0",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "expo-modules-core@57.0.14": "patches/expo-modules-core@57.0.14.patch"
+    }
+  }
+}
