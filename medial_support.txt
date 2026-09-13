@@ -35,6 +35,7 @@ AstroSet is a comprehensive daily events application that brings together astrol
 **Smart Features:**
 - Automatic refresh every 30 minutes with countdown
 - Offline caching - your last data is always available, even without internet
+- Automatic over-the-air updates - new features and fixes reach you instantly through EAS Update, no manual downloads needed
 - Your settings are saved - location, zodiac sign and preferences persist between sessions
 - Custom location settings with latitude/longitude
 - Clean dark-space themed interface
@@ -63,6 +64,7 @@ Whether you're planning your day by the stars, hunting for the northern lights, 
 ✅ Offline mode - your data is there even without internet
 ✅ Remembers your settings on every device
 ✅ Auto-refreshes so you're always up to date
+✅ Auto-updates - you always get the latest features instantly
 
 Download AstroSet today and never miss a cosmic event again! 🚀
 
@@ -81,5 +83,3 @@ Download AstroSet today and never miss a cosmic event again! 🚀
 4. Close-up of a smartphone in hand displaying a beautiful dark-themed astronomy dashboard with a circular zodiac wheel, moon phase icons, and an orange area chart of solar activity, with a real full moon softly blurred in the background twilight sky, product photography style, crisp and modern.
 
 5. An artistic flat-lay of a photographer's gear - camera, tripod, thermos - on a wooden deck overlooking a lake at twilight, with a laptop showing an aurora forecast and planetary retrograde calendar, and the first stars appearing in a gradient orange-to-navy sky, cozy adventurous mood, lifestyle photography.
-
-6. A mesmerizing visualization of Earth's electromagnetic heartbeat: glowing concentric wave rings emanating from the planet at 7.83 Hz frequency bands, with a live scientific spectrogram panel showing colorful resonance patterns in green and amber against the dark of space, modern data-visualization aesthetic.

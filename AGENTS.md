@@ -13,12 +13,14 @@ Published on Google Play (package `com.vortex.astro`). The desktop (Electron) ap
 - **Mobile (Android):** React Native + Expo
 - **Shared Logic:** Turborepo monorepo with `packages/core`
 - **Notifications:** expo-notifications (local scheduled)
+- **OTA Updates:** EAS Update (expo-updates)
 
 ## Project Structure
 ```
 astroset/
 ├── apps/
 │   └── mobile/         # React Native Android app (Play Store)
+│       └── eas.json    # EAS build/update profiles (channels: default, preview)
 ├── packages/
 │   └── core/           # Shared business logic
 ├── release/            # Play Store distributable artifacts
@@ -75,6 +77,19 @@ pnpm build:core
 # from apps/mobile/android/
 .\gradlew.bat :app:assembleRelease :app:bundleRelease
 ```
+
+### Publish OTA Update (EAS Update)
+```bash
+# from apps/mobile/ — requires EXPO_TOKEN (see credentials.txt)
+eas update --channel default --environment production --message "<what changed>" --non-interactive
+```
+- Only JS + assets are updated over-the-air; the installed app must be a build that embeds the same `runtimeVersion` fingerprint.
+- After changing `app.json` (version, `checkAutomatically`, etc.) you MUST re-run `expo prebuild` + re-apply the wipe list and rebuild, or the fingerprint will not match.
+
+### After `expo prebuild` (MANDATORY re-apply list — prebuild wipes these)
+1. Restore `android/keystore.properties` + `android/app/release.keystore`
+2. `android/app/build.gradle`: release `signingConfig` block + `minifyEnabled true` + `shrinkResources true` (R8)
+3. `android/gradle/wrapper/gradle-wrapper.properties`: pin `gradle-8.14.3-bin.zip` (prebuild resets to 9.3.1)
 
 ## Release Artifacts Rule (MANDATORY)
 
@@ -797,3 +812,31 @@ ode_modules/expo/AppEntry.js which no longer exists in Expo SDK 52
 - Store the NEW keystore (astroset2026 / astroset-release) safely — it is now the signing key for Play App Signing if the app is published.
 - App is now completely ad-free; Play Console Data safety form no longer needs ad disclosures.
 - Remaining blockers for actual resubmission (external, deferred): host the ad-free public Privacy Policy URL, fill the Data safety form, complete store listing.
+
+### Modification 035
+**Date:** 2026-09-13
+
+**Changes:**
+- Added EAS Update (OTA) support: apps now receive JavaScript/asset-only updates over-the-air via Expo's update service without a new Play Store build
+- Installed expo-updates (~57.0.22) in apps/mobile
+- Created EAS project `@kogn12/astroset` (ID `4db59433-266e-4e90-866d-6484bf9d6969`); authenticated via token from `credentials.txt`
+- app.json: added `updates` block (`url https://u.expo.dev/4db59433-...`, `enabled`, `checkAutomatically: "ON_LOAD"`), `runtimeVersion` fingerprint policy, `extra.eas.projectId`, `owner: "kogn12"`; version 1.3 -> 1.3.1, versionCode 7 -> 8
+- Created apps/mobile/eas.json (build profiles: development/preview/production with channels default/preview; `update.channel` key removed — eas-cli 24.x no longer accepts a top-level `update` block)
+- Regenerated native android via `expo prebuild` and re-applied the standard wipe list: release signing config (keystore.properties), `minifyEnabled true` + `shrinkResources true` (R8), gradle wrapper 8.14.3
+- Rebuilt signed AAB/APK (BUILD SUCCESSFUL) and consolidated to root release/
+- Published initial OTA update to `default` branch/channel (Android update group 73ac4383-708e-4c65-9dec-9e5aa07e6c62, runtime version 61bdafc21e8578b3961c0646dac69aea4d8499d3)
+- Initialized Git repository (repo name: `Vortex Astroset`); first commit created. .gitignore updated: credentials.txt, local.properties, android/.gradle/.kotlin/.cxx, release/*.apk|.aab|*-mapping.txt, and a stray locked `cmd.exe` in repo root flagged
+
+**Files/Components:**
+- apps/mobile/app.json, apps/mobile/eas.json (new), apps/mobile/package.json (expo-updates), apps/mobile/android/ (regenerated)
+- .gitignore, .git/ (new), package.json / packages/core/package.json / apps/mobile/package.json (version 1.3.1)
+- release/AstroSet-android.apk, release/AstroSet-android.aab, release/AstroSet-android-mapping.txt (rebuilt)
+
+**Important Notes:**
+- expo-updates validates `checkAutomatically` against the JS-facing enum: valid values are `ON_LOAD`, `WIFI_ONLY`, `NEVER`, `ON_ERROR_RECOVERY` — NOT the native values (`ALWAYS`) or the removed `ON_LOAD_AND_SPLASH`. `ON_LOAD` maps to native `ALWAYS` in the manifest (`EXPO_UPDATES_CHECK_ON_LAUNCH`)
+- Changing app.json (`checkAutomatically`, version, etc.) changes the runtime fingerprint → the embedded runtimeVersion in the native build changes → builds MUST be regenerated (`expo prebuild`) and rebuilt after any of these edits, or published OTA updates will not match the installed app
+- OTA updates only cover JS + assets. Any native dependency/config change requires a full AAB rebuild + Play Store release
+- `eas update` from CI/terminal: set `EXPO_TOKEN` env var (token stored in credentials.txt, gitignored). Command: `eas update --channel default --environment production --message "..." --non-interactive` (run from apps/mobile)
+- EAS Update requires a Git repository; repo was initialized during this modification
+- A stray copy of `C:\Windows\System32\cmd.exe` exists in the repo root (byte-identical hash to the system cmd). It is gitignored but could not be deleted (Access denied — likely locked); delete manually if no longer needed
+- Known gap: pending Play Store blockers from Mod 034/033 are unchanged; OTA updates are testable via the rebuilt APK

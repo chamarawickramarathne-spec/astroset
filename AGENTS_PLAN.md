@@ -1,12 +1,30 @@
 # AGENTS_PLAN.md
 
 ## Current Track
-Play Store rejection remediation — Google rejected AstroSet on:
-Target API level / SDK requirement, Data safety / privacy policy, app version and levels.
+EAS Update (OTA) integration — app can now receive JavaScript/asset-only updates over-the-air via
+Expo's update service without a new Play Store build. Version bumped to 1.3.1 (versionCode 8).
+Git repository initialized (branch `main`). See AGENTS.md Mod 035 for full details.
 
-Decided: **remove AdMob entirely** (defer monetization) and fix the "app version and levels"
-rejection by changing versionName from `1.3.0` (trailing `.0`) to `1.3`. New keystore generated
-(previous one was lost to `expo prebuild`). App is now ad-free.
+Remaining Play Store blockers (unchanged from Mod 033/034): host the ad-free public Privacy Policy
+URL, fill the Play Console Data safety form, complete the store listing.
+
+## In Progress
+- [x] Use Expo token from credentials.txt for EAS auth (kogn12 / chamara.wickramarathne@gmail.com)
+- [x] Install eas-cli (global, under E:\AIprojects\AI Agent per rule 1.1)
+- [x] Create/link EAS project @kogn12/astroset (projectId 4db59433-266e-4e90-866d-6484bf9d6969)
+- [x] Install expo-updates (~57.0.22) in apps/mobile
+- [x] app.json: updates block (url https://u.expo.dev/4db59433-...), runtimeVersion fingerprint policy, extra.eas.projectId, owner kogn12; version 1.3 -> 1.3.1, versionCode 7 -> 8
+- [x] Create apps/mobile/eas.json (development/preview/production profiles; channels default/preview)
+- [x] expo prebuild + re-apply wipe list (release signing config, R8 minify+shrink, gradle wrapper 8.14.3)
+- [x] Rebuild signed AAB/APK and consolidate to root release/ (AstroSet-android.apk 93.2MB, .aab 68.5MB, -mapping.txt 54.7MB)
+- [x] Publish initial OTA update to default channel (Android group 73ac4383-708e-4c65-9dec-9e5aa07e6c62, runtime 61bdafc2..., commit b3a3502)
+- [x] Initialize Git repo + .gitignore hardening (credentials.txt, keystores, build caches excluded); initial commit b3a3502
+- [x] Update docs (AGENTS.md Mod 035, AGENTS_PLAN.md, medial_support.txt)
+
+## Build Fixes (this session)
+- [x] The `update` top-level block is NOT accepted in eas.json by eas-cli 24.x — removed; channels are defined per build profile instead
+- [x] `updates.checkAutomatically` in app.json must be a JS-facing enum value: `ON_LOAD` | `WIFI_ONLY` | `NEVER` | `ON_ERROR_RECOVERY`. Native values (`ALWAYS`) and removed values (`ON_LOAD_AND_SPLASH`) are rejected by the EAS manifest validator. `ON_LOAD` maps to native `ALWAYS` in AndroidManifest (`EXPO_UPDATES_CHECK_ON_LAUNCH`)
+- [x] Changing app.json after a build changes the runtime fingerprint → a full `expo prebuild` + rebuild is required for embedded runtimeVersion to match published updates
 
 ## In Progress
 - [x] Phase 0: Sync AGENTS_PLAN.md + AGENTS.md to reflect current 1.3.0 state
@@ -66,6 +84,7 @@ rejection by changing versionName from `1.3.0` (trailing `.0`) to `1.3`. New key
 - [x] Data accuracy audit (Mod 025): fix RTSW newest-first solar wind, real Bz from mag feed, exact moon illumination/age, Kundlit timezone from Open-Meteo, as-of timestamps + horoscope date labels
 - [x] Play resubmission remediation (Mod 033): in-app Privacy Policy screen + Settings link; FORCE_TEST_ADS=false; dedicated AstroSet AdMob placeholders; version aligned to 1.3.0; versionCode 5->6; rebuilt signed AAB/APK/mapping consolidated to release/; desktop app fully removed; gradle wrapper 8.14.3; google-mobile-ads 15.8.3; expo-modules-core worklet pnpm patch
 - [x] AdMob removed (Mod 034): deleted ads.ts + AdBanner.tsx, stripped all screen usages, removed dep + plugin + manifest meta-data; versionName 1.3.0 -> 1.3 and versionCode 6 -> 7 (fixed trailing .0 rejection); NEW keystore generated (old lost to prebuild); re-applied signing + R8 + wrapper 8.14.3; rebuilt signed AAB/APK, verified no ads code in bundle; privacy policy rewritten ad-free; consolidated to release/
+- [x] EAS Update (OTA) integration (Mod 035): expo-updates installed, EAS project linked, app.json updates/fingerprint config, eas.json created, native regenerated + wipe list re-applied, version 1.3.1 / versionCode 8, initial OTA published to default channel, Git repo initialized + first commit
 
 ## Pending / Blocking for Play resubmission
 - [ ] Host a public Privacy Policy URL (ad-free version in release/PRIVACY_POLICY.md) and fill the Play Console Data safety form + store listing
