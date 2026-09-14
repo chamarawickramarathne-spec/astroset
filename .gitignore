@@ -12,9 +12,9 @@ Thumbs.db
 keystore.properties
 credentials.txt
 local.properties
-apps/mobile/android/.gradle/
-apps/mobile/android/.kotlin/
-apps/mobile/android/.cxx/
+android/.gradle/
+android/.kotlin/
+android/.cxx/
 release/*.apk
 release/*.aab
 release/*-mapping.txt

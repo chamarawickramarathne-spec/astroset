@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, ScrollView, RefreshControl, StyleSheet, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { getSettings, getSettingsRevision } from '@astroset/core';
-import { fetchDailyData, cachedFetch } from '@astroset/core';
-import type { DailyData } from '@astroset/core';
+import { useFocusEffect } from 'expo-router';
+import { getSettings, getSettingsRevision } from '../src/core';
+import { fetchDailyData, cachedFetch } from '../src/core';
+import type { DailyData } from '../src/core';
 import PlanetaryChart from '../components/PlanetaryChart';
 
 function formatEventDate(iso: string): string {

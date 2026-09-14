@@ -3,7 +3,7 @@ import { Tabs } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, ActivityIndicator, StyleSheet, ColorValue } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { configureStorage, loadSettings } from '@astroset/core';
+import { configureStorage, loadSettings } from '../src/core';
 
 configureStorage(AsyncStorage);
 

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, ScrollView, RefreshControl, StyleSheet, ActivityIndicator } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { getSettings, getSettingsRevision } from '@astroset/core';
-import { getWeatherForecast, cachedFetch } from '@astroset/core';
-import type { WeatherData } from '@astroset/core';
+import { useFocusEffect } from 'expo-router';
+import { getSettings, getSettingsRevision } from '../src/core';
+import { getWeatherForecast, cachedFetch } from '../src/core';
+import type { WeatherData } from '../src/core';
 
 export default function WeatherScreen() {
   const [data, setData] = useState<WeatherData | null>(null);

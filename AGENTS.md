@@ -10,27 +10,32 @@ AstroSet is an Android-only daily events application that provides:
 Published on Google Play (package `com.vortex.astro`). The desktop (Electron) app has been removed; this project is mobile/Android only.
 
 ## Tech Stack
-- **Mobile (Android):** React Native + Expo
-- **Shared Logic:** Turborepo monorepo with `packages/core`
+- **Mobile (Android):** React Native + Expo (single flat project, no monorepo)
+- **Shared Logic:** `src/core/` (was `packages/core`, moved in-place)
 - **Notifications:** expo-notifications (local scheduled)
 - **OTA Updates:** EAS Update (expo-updates)
 
 ## Project Structure
 ```
 astroset/
-├── apps/
-│   └── mobile/         # React Native Android app (Play Store)
-│       └── eas.json    # EAS build/update profiles (channels: default, preview)
-├── packages/
-│   └── core/           # Shared business logic
-├── release/            # Play Store distributable artifacts
+├── app/                  # expo-router screens (Today, Solar, Weather, Settings, Privacy)
+├── src/
+│   ├── core/             # Shared business logic (was packages/core)
+│   └── hooks/            # useNotifications
+├── components/           # PlanetaryChart, XrayChart, etc.
+├── android/              # Native Android project (built via expo prebuild)
+├── assets/               # App icons, splash, adaptive icon
+├── release/              # Play Store distributable artifacts
 │   ├── AstroSet-android.apk
 │   ├── AstroSet-android.aab
 │   ├── AstroSet-android-mapping.txt
 │   ├── feature_graphic.png
-│   ├── phone/          # Play Store phone screenshots
-│   ├── tablet7/        # Play Store 7-inch tablet screenshots
-│   └── tablet10/       # Play Store 10-inch tablet screenshots
+│   ├── PRIVACY_POLICY.md
+│   ├── phone/            # Play Store phone screenshots
+│   ├── tablet7/          # Play Store 7-inch tablet screenshots
+│   └── tablet10/         # Play Store 10-inch tablet screenshots
+├── media/                # Icons, logos, screenshots
+├── patches/              # pnpm patches (expo-modules-core worklet fix)
 ├── AGENTS.md
 ├── AGENTS_PLAN.md
 └── medial_support.txt
@@ -59,7 +64,7 @@ pnpm install
 
 ### Run Mobile App
 ```bash
-pnpm dev        # or: pnpm --filter @astroset/mobile start
+pnpm dev        # or: pnpm start
 ```
 
 ### Typecheck Mobile
@@ -67,20 +72,15 @@ pnpm dev        # or: pnpm --filter @astroset/mobile start
 pnpm typecheck
 ```
 
-### Build Shared Core
-```bash
-pnpm build:core
-```
-
 ### Build Signed AAB / APK (Android)
 ```bash
-# from apps/mobile/android/
+# from android/
 .\gradlew.bat :app:assembleRelease :app:bundleRelease
 ```
 
 ### Publish OTA Update (EAS Update)
 ```bash
-# from apps/mobile/ — requires EXPO_TOKEN (see credentials.txt)
+# requires EXPO_TOKEN (see credentials.txt)
 eas update --channel default --environment production --message "<what changed>" --non-interactive
 ```
 - Only JS + assets are updated over-the-air; the installed app must be a build that embeds the same `runtimeVersion` fingerprint.
@@ -97,12 +97,12 @@ After every Android build, all Play Store distributable artifacts MUST be placed
 
 ```
 release/
-├── AstroSet-android.apk   # Android APK (from apps/mobile/android/app/build/outputs/apk/release/)
-├── AstroSet-android.aab   # Android App Bundle (from apps/mobile/android/app/build/outputs/bundle/release/)
-└── AstroSet-android-mapping.txt  # R8 deobfuscation mapping (from apps/mobile/android/app/build/outputs/mapping/release/)
+├── AstroSet-android.apk   # Android APK (from android/app/build/outputs/apk/release/)
+├── AstroSet-android.aab   # Android App Bundle (from android/app/build/outputs/bundle/release/)
+└── AstroSet-android-mapping.txt  # R8 deobfuscation mapping (from android/app/build/outputs/mapping/release/)
 ```
 
-- Build outputs land in `apps/mobile/android/app/build/outputs/...`; they must be copied to root `release/` after each build.
+- Build outputs land in `android/app/build/outputs/...`; they must be copied to root `release/` after each build.
 - Never use version numbers in artifact filenames; keep stable names.
 - The `.aab` is the artifact uploaded to the Google Play Console.
 
@@ -836,7 +836,52 @@ ode_modules/expo/AppEntry.js which no longer exists in Expo SDK 52
 - expo-updates validates `checkAutomatically` against the JS-facing enum: valid values are `ON_LOAD`, `WIFI_ONLY`, `NEVER`, `ON_ERROR_RECOVERY` — NOT the native values (`ALWAYS`) or the removed `ON_LOAD_AND_SPLASH`. `ON_LOAD` maps to native `ALWAYS` in the manifest (`EXPO_UPDATES_CHECK_ON_LAUNCH`)
 - Changing app.json (`checkAutomatically`, version, etc.) changes the runtime fingerprint → the embedded runtimeVersion in the native build changes → builds MUST be regenerated (`expo prebuild`) and rebuilt after any of these edits, or published OTA updates will not match the installed app
 - OTA updates only cover JS + assets. Any native dependency/config change requires a full AAB rebuild + Play Store release
-- `eas update` from CI/terminal: set `EXPO_TOKEN` env var (token stored in credentials.txt, gitignored). Command: `eas update --channel default --environment production --message "..." --non-interactive` (run from apps/mobile)
+- `eas update` from CI/terminal: set `EXPO_TOKEN` env var (token stored in credentials.txt, gitignored). Command: `eas update --channel default --environment production --message "..." --non-interactive` (run from project root)
 - EAS Update requires a Git repository; repo was initialized during this modification
 - A stray copy of `C:\Windows\System32\cmd.exe` exists in the repo root (byte-identical hash to the system cmd). It is gitignored but could not be deleted (Access denied — likely locked); delete manually if no longer needed
 - Known gap: pending Play Store blockers from Mod 034/033 are unchanged; OTA updates are testable via the rebuilt APK
+
+### Modification 036
+**Date:** 2026-09-14
+
+**Changes:**
+- Deleted the last of the monorepo structure — the project is now a single flat Expo (React Native Android) project at the repo root. No `apps/`, no `packages/`, no Turborepo, no pnpm workspace.
+- Moved the whole app up from `apps/mobile/` to the repo root: `app/`, `components/`, `assets/`, `android/`, `app.json`, `eas.json`, `metro.config.js`, `babel.config.js`, `tsconfig.json` are now top-level.
+- Moved shared core logic `packages/core/src/` → `src/core/` (deleted empty `src/core/{config,hooks,utils}` dirs and the internal `package.json`).
+- Rewrote all 7 importer files from `import ... from '@astroset/core'` to relative `import ... from '../src/core'` (app/_layout.tsx, app/index.tsx, app/solar.tsx, app/weather.tsx, app/settings.tsx, components/PlanetaryChart.tsx, components/XrayChart.tsx). Removed the tsconfig `paths` alias.
+- Root `package.json` is now the app manifest: dependencies merged from apps/mobile (incl. `astronomy-engine` moved from core), scripts are direct (`expo start`, `tsc --noEmit`, ...), `turbo` devDep and `build:core` script removed. Removed `@react-navigation/native` and swapped `useFocusEffect` to `expo-router`'s export (SDK 56+ rejects react-navigation imports).
+- Deleted `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.base.json`, the entire `apps/` and `packages/`/ directory. `.gitignore` android cache paths updated (`android/.gradle` etc.). Root `index.js` now serves as both the Metro entry file and the app entry — the old Windows entry-file relativity workaround (Mod 006) no longer applies.
+- Kept `patches/expo-modules-core@57.0.14.patch`; pnpm 9 ignores the `pnpm.patchedDependencies` field (warning at install) but the patch is registered in `pnpm-lock.yaml` (`patch_hash=q3wbwvgd...`) and is applied on install — verified `enableWorkletsIntegration = false` in the installed expo-modules-core.
+- Removed old `apps/mobile/dist`, `.expo`, and `apps/mobile/node_modules` during deletion; fresh `pnpm install` at root (627 packages). Default expo install scripts run at root.
+- Verified: `pnpm typecheck` passes (tsc --noEmit); `expo export --platform android` bundles the app into a Hermes bundle (3.2MB) with zero resolution errors.
+
+**Files/Components:**
+- `app/`, `components/`, `assets/`, `android/`, `src/core/` (moved to root)
+- `app.json`, `eas.json`, `metro.config.js`, `babel.config.js`, `tsconfig.json`, `package.json`, `pnpm-lock.yaml`, `.gitignore`
+- `src/core/` (was `packages/core/src`), `src/hooks/useNotifications.ts` (was `apps/mobile/src/hooks`)
+- Deleted: `apps/`, `packages/`, `pnpm-workspace.yaml`, `turbo.json`, `tsconfig.base.json`
+
+**Important Notes:**
+- The app now builds from the repo root: `pnpm install`, `pnpm typecheck`, `pnpm android`, `.\android\gradlew.bat :app:assembleRelease :app:bundleRelease`, `eas update ...` all run from root.
+- RN gradle autolinking and `expo prebuild` resolve the project root from `package.json`/`app.json` at the repo root; relative relationships inside `android/` are unchanged (still `android/app/...`, `android/gradle/wrapper/...`).
+- Restarting from a deleted `pnpm-lock.yaml` will NOT apply the expo-modules-core patch (pnpm 9 no longer reads `patchedDependencies` from package.json). If the lockfile is ever regenerated, re-enable the patch in `pnpm-workspace.yaml` (`patchedDependencies`) and re-run install.
+- The SDK 56+ react-navigation check now surfaces at `expo export`/Metro time; the app uses expo-router's `useFocusEffect`, so no react-navigation import remains.
+- monorepo history (Mod 001–035) is retained for reference; all path references in old entries are historical and no longer resolve.
+
+### Modification 037
+**Date:** 2026-09-14
+
+**Changes:**
+- Rebuilt signed release AAB/APK/mapping.txt from the flattened source (same runtime version 1.3.1, versionCode 8); old Mod 035 build artifacts in `release/` were from pre-flatten code and must not be used for Play submission.
+- Published a fresh OTA update (`eas update --channel default`, environment production) so the runtime fingerprint matches the rebuilt native build — all future JS-only changes can now ship without a Play Store rebuild.
+- Pushed repo to a private GitHub repository (owner `kogn12`) and published the ad-free Privacy Policy to GitHub Pages at `https://kogn12.github.io/astroset/privacy.html`; the Play Console store listing will use this URL.
+- Hand off: Play Console runbook provided to user (store listing, data safety, content rating, AAB upload steps).
+
+**Files/Components:**
+- `release/AstroSet-android.apk`, `release/AstroSet-android.aab`, `release/AstroSet-android-mapping.txt` (rebuilt)
+- GitHub Pages: `https://kogn12.github.io/astroset/privacy.html`
+
+**Important Notes:**
+- The privacy policy URL is `https://kogn12.github.io/astroset/privacy.html`; this goes in the Play Console store listing and Data safety form.
+- The new AAB embeds the runtime fingerprint that matches the OTA update published in this modification. Any subsequent `eas update` will apply to devices running this build automatically on launch.
+- Keystore unchanged (same `astroset2026` / `astroset-release` upload key from Mod 034; Play App Signing takes over once uploaded to Play Console).

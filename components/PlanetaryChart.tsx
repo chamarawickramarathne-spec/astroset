@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle, Line, Text as SvgText } from 'react-native-svg';
-import type { PlanetPosition } from '@astroset/core';
+import type { PlanetPosition } from '../src/core';
 
 const SIZE = 300;
 const CENTER = SIZE / 2;

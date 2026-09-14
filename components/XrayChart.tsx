@@ -1,6 +1,6 @@
 import React from 'react';
 import Svg, { Path, Line, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
-import type { XrayFluxPoint } from '@astroset/core';
+import type { XrayFluxPoint } from '../src/core';
 
 const W = 340;
 const H = 190;

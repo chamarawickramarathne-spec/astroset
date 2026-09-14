@@ -1,12 +1,21 @@
 # AGENTS_PLAN.md
 
 ## Current Track
-EAS Update (OTA) integration — app can now receive JavaScript/asset-only updates over-the-air via
-Expo's update service without a new Play Store build. Version bumped to 1.3.1 (versionCode 8).
-Git repository initialized (branch `main`). See AGENTS.md Mod 035 for full details.
+Google Play submission. The app is a single flat Expo project (Mod 036).
+Sequence: update plan → commit Mod 036 → rebuild signed AAB/APK → consolidate to release/ →
+host Privacy Policy on GitHub Pages → publish matching OTA update → hand off Play Console runbook.
 
-Remaining Play Store blockers (unchanged from Mod 033/034): host the ad-free public Privacy Policy
-URL, fill the Play Console Data safety form, complete the store listing.
+## In Progress (Mod 037)
+- [ ] Update AGENTS_PLAN.md + AGENTS.md (Mod 037 docs)
+- [ ] Commit Mod 036 flat-project restructuring
+- [ ] Rebuild signed AAB/APK from flattened source (gradlew bundleRelease + assembleRelease)
+- [ ] Verify AAB: package com.vortex.astro, versionCode 8 / "1.3.1", no ads libs, targetSdk 36
+- [ ] Consolidate new AAB/APK/mapping.txt into root release/
+- [ ] Create private GitHub repo + push + publish Privacy Policy via GitHub Pages
+- [ ] Confirm privacy policy URL live
+- [ ] Publish OTA update (eas update --channel default) after rebuild
+- [ ] Commit Mod 037 work
+- [ ] Hand off Play Console runbook (user: create app, store listing, data safety, content rating, upload AAB)
 
 ## In Progress
 - [x] Use Expo token from credentials.txt for EAS auth (kogn12 / chamara.wickramarathne@gmail.com)
@@ -85,13 +94,14 @@ URL, fill the Play Console Data safety form, complete the store listing.
 - [x] Play resubmission remediation (Mod 033): in-app Privacy Policy screen + Settings link; FORCE_TEST_ADS=false; dedicated AstroSet AdMob placeholders; version aligned to 1.3.0; versionCode 5->6; rebuilt signed AAB/APK/mapping consolidated to release/; desktop app fully removed; gradle wrapper 8.14.3; google-mobile-ads 15.8.3; expo-modules-core worklet pnpm patch
 - [x] AdMob removed (Mod 034): deleted ads.ts + AdBanner.tsx, stripped all screen usages, removed dep + plugin + manifest meta-data; versionName 1.3.0 -> 1.3 and versionCode 6 -> 7 (fixed trailing .0 rejection); NEW keystore generated (old lost to prebuild); re-applied signing + R8 + wrapper 8.14.3; rebuilt signed AAB/APK, verified no ads code in bundle; privacy policy rewritten ad-free; consolidated to release/
 - [x] EAS Update (OTA) integration (Mod 035): expo-updates installed, EAS project linked, app.json updates/fingerprint config, eas.json created, native regenerated + wipe list re-applied, version 1.3.1 / versionCode 8, initial OTA published to default channel, Git repo initialized + first commit
+- [x] Monorepo flattened to a single Expo project (Mod 036): apps/mobile + packages/core moved to repo root, `@astroset/core` imports rewritten to relative `../src/core`, tsconfig paths removed, react-navigation dropped (useFocusEffect now from expo-router), pnpm-workspace.yaml/turbo.json/tsconfig.base.json deleted, root package.json is the app manifest, fresh install + typecheck + Metro export verified
 
 ## Pending / Blocking for Play resubmission
-- [ ] Host a public Privacy Policy URL (ad-free version in release/PRIVACY_POLICY.md) and fill the Play Console Data safety form + store listing
-- [ ] Deferred: re-add monetization (AdMob) later with dedicated AstroSet App ID/unit — no ad code present in current build
+- [ ] Play Console: fill Data safety form, content rating, store listing (user, manual)
+- [ ] Deferred: re-add monetization (AdMob) later with dedicated AstroSet App ID/unit
 
 ## Known Issues / Follow-ups (optional, non-blocking)
-- electron-builder emits an extra combined AstroSet-Setup.exe on dual-arch builds; delete it after builds (only arch-specific installers are kept)
+- `expo-modules-core` worklet patch lives in `pnpm-lock.yaml` (path `patches/expo-modules-core@57.0.14.patch`). If the lockfile is ever regenerated from scratch, the patch MUST be re-registered via a `pnpm-workspace.yaml` `patchedDependencies` block, or the Android build will fail on `runtime->executeSync()`.
 
 ## Notes
 - All APIs are free tier

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, ScrollView, RefreshControl, StyleSheet, ActivityIndicator, Image } from 'react-native';
-import { getSolarData, getSchumannData, cachedFetch } from '@astroset/core';
-import type { SchumannData, SolarData } from '@astroset/core';
+import { getSolarData, getSchumannData, cachedFetch } from '../src/core';
+import type { SchumannData, SolarData } from '../src/core';
 import XrayChart from '../components/XrayChart';
 
 export default function SolarScreen() {

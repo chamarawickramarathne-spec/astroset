@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TextInput, Switch, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import { getSettings, saveSettings } from '@astroset/core';
-import type { UserSettings } from '@astroset/core';
+import { getSettings, saveSettings } from '../src/core';
+import type { UserSettings } from '../src/core';
 
 const ZODIAC_SIGNS = [
   'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
