@@ -1,58 +1,20 @@
 # AGENTS_PLAN.md
 
 ## Current Track
-Google Play submission. The app is a single flat Expo project (Mod 036).
-All build/push/OTA/docs work is done (Mod 037). Only the handoff Play Console runbook is pending.
+Play Store submission is ready. All Mod 037 work (rebuild, OTA, GitHub, docs) is complete.
+Play Console runbook was handed off to user — awaiting user to create app, fill listing, and upload AAB.
 
-Privacy Policy hosted at: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
-GitHub repo (public): `https://github.com/chamarawickramarathne-spec/astroset`
-OTA: published Android group `62e3d8d6` (runtime `bdd056be`) on `default` channel.
-
-## In Progress (Mod 037)
+## Mod 037 — Completed
 - [x] Update AGENTS_PLAN.md + AGENTS.md (Mod 037 docs)
 - [x] Commit Mod 036 flat-project restructuring
 - [x] Rebuild signed AAB/APK from flattened source (gradlew bundleRelease + assembleRelease)
 - [x] Verify AAB: package com.vortex.astro, versionCode 8 / "1.3.1", no ads libs, targetSdk 36
 - [x] Consolidate new AAB/APK/mapping.txt into root release/
-- [x] Create GitHub repo `chamarawickramarathne-spec/astroset` (public, free plan) + push + Privacy Policy published via GitHub Pages from `gh-pages` branch
-- [x] Confirm privacy policy URL live: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
-- [x] Publish OTA update (eas update --channel default, Android group 62e3d8d6) after rebuild
-- [x] Commit Mod 037 work
-- [ ] Hand off Play Console runbook (user: create app, store listing, data safety, content rating, upload AAB)
-
-## In Progress
-- [x] Use Expo token from credentials.txt for EAS auth (kogn12 / chamara.wickramarathne@gmail.com)
-- [x] Install eas-cli (global, under E:\AIprojects\AI Agent per rule 1.1)
-- [x] Create/link EAS project @kogn12/astroset (projectId 4db59433-266e-4e90-866d-6484bf9d6969)
-- [x] Install expo-updates (~57.0.22) in apps/mobile
-- [x] app.json: updates block (url https://u.expo.dev/4db59433-...), runtimeVersion fingerprint policy, extra.eas.projectId, owner kogn12; version 1.3 -> 1.3.1, versionCode 7 -> 8
-- [x] Create apps/mobile/eas.json (development/preview/production profiles; channels default/preview)
-- [x] expo prebuild + re-apply wipe list (release signing config, R8 minify+shrink, gradle wrapper 8.14.3)
-- [x] Rebuild signed AAB/APK and consolidate to root release/ (AstroSet-android.apk 93.2MB, .aab 68.5MB, -mapping.txt 54.7MB)
-- [x] Publish initial OTA update to default channel (Android group 73ac4383-708e-4c65-9dec-9e5aa07e6c62, runtime 61bdafc2..., commit b3a3502)
-- [x] Initialize Git repo + .gitignore hardening (credentials.txt, keystores, build caches excluded); initial commit b3a3502
-- [x] Update docs (AGENTS.md Mod 035, AGENTS_PLAN.md, medial_support.txt)
-
-## Build Fixes (this session)
-- [x] The `update` top-level block is NOT accepted in eas.json by eas-cli 24.x — removed; channels are defined per build profile instead
-- [x] `updates.checkAutomatically` in app.json must be a JS-facing enum value: `ON_LOAD` | `WIFI_ONLY` | `NEVER` | `ON_ERROR_RECOVERY`. Native values (`ALWAYS`) and removed values (`ON_LOAD_AND_SPLASH`) are rejected by the EAS manifest validator. `ON_LOAD` maps to native `ALWAYS` in AndroidManifest (`EXPO_UPDATES_CHECK_ON_LAUNCH`)
-- [x] Changing app.json after a build changes the runtime fingerprint → a full `expo prebuild` + rebuild is required for embedded runtimeVersion to match published updates
-
-## In Progress
-- [x] Phase 0: Sync AGENTS_PLAN.md + AGENTS.md to reflect current 1.3.0 state
-- [x] Phase 1: Privacy & Data Safety — in-app Privacy Policy screen (apps/mobile/app/privacy.tsx) + Settings link
-- [x] Phase 2: Ads REMOVED entirely — deleted ads.ts + AdBanner.tsx, stripped imports/usages in all 4 screens + _layout, removed react-native-google-mobile-ads dep (pnpm install dropped 21 packages), cleared app.json plugin + AndroidManifest meta-data via expo prebuild; privacy policy rewritten ad-free (privacy.tsx + release/PRIVACY_POLICY.md)
-- [x] Phase 3: Version — root package.json 1.2.0 -> 1.3; versionName 1.3.0 -> 1.3 in app.json + build.gradle
-- [x] Phase 4: Android versionCode 6 -> 7 (app.json + build.gradle); versionName "1.3"
-- [x] Phase 5: Rebuild signed AAB/APK with NEW keystore; consolidate to release/
-- [x] Phase 6: Update docs (AGENTS.md Mod 034, AGENTS_PLAN.md, medial_support.txt ad-free)
-
-## Build Fixes (this session)
-- [x] Desktop app fully removed (apps/desktop/ and root desktop installers deleted); root package.json scripts cleaned (dev/start/android/typecheck); AGENTS.md rewritten mobile-only
-- [x] Gradle wrapper 9.3.1 -> 8.14.3 (9.3.1 broke at included-build settings plugins{} compile); backup gradle-wrapper.properties.bak
-- [x] react-native-google-mobile-ads 16.5.0 -> 15.8.3 (play-services-ads 24.6.0) to resolve Kotlin metadata 2.3.0 vs Kotlin 2.1.20 incompatibility
-- [x] NEW: expo-modules-core 57.0.14 worklet C++ calls runtime->executeSync() which no longer exists in react-native-worklets 0.12.1 (renamed runSync). Fixed via durable pnpm patch (patches/expo-modules-core@57.0.14.patch) disabling expo worklets integration (build.gradle enableWorkletsIntegration=false). App uses reanimated's worklets, not expo's, so this is safe. worklets cannot be downgraded (reanimated 4.6.0 hard-requires 0.12.x) and expo-modules-core 57.0.14 is latest.
-- [x] Rebuild :app:assembleRelease :app:bundleRelease with patched deps; copy outputs to root release/ (AstroSet-android.apk/.aab/-mapping.txt)
+- [x] Create GitHub repo `chamarawickramarathne-spec/astroset` (public, free plan) + push
+- [x] Publish Privacy Policy via GitHub Pages from `gh-pages` branch — live at `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
+- [x] Publish OTA update (eas update --channel default, Android group 62e3d8d6, runtime bdd056be)
+- [x] Commit Mod 037 work (2 commits on main)
+- [x] Hand off Play Console runbook (store listing, data safety, content rating, upload AAB + mapping.txt)
 
 ## Completed
 - [x] Initialize monorepo with pnpm + Turborepo
@@ -101,7 +63,7 @@ OTA: published Android group `62e3d8d6` (runtime `bdd056be`) on `default` channe
 - [x] Play Store prep (Mod 037): rebuilt signed AAB/APK/mapping.txt from flattened source; committed full changeset; created public GitHub repo `chamarawickramarathne-spec/astroset`; published Privacy Policy via GitHub Pages at `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`; published OTA update (group 62e3d8d6, runtime bdd056be, default channel); all files verified (package, versionCode 8, targetSdk 36, no ads, correct keystore)
 
 ## Pending / Blocking for Play resubmission
-- [ ] Play Console: fill Data safety form, content rating, store listing (user, manual)
+- [ ] User action (manual, runbook provided): Play Console — create app, fill store listing, Data safety form (no data collected), content rating (IARC), upload `release/AstroSet-android.aab` + `-mapping.txt`, internal test then production
 - [ ] Deferred: re-add monetization (AdMob) later with dedicated AstroSet App ID/unit
 
 ## Known Issues / Follow-ups (optional, non-blocking)

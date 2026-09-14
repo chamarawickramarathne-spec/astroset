@@ -8,6 +8,9 @@ AstroSet is an Android-only daily events application that provides:
 - **Weather forecasts** (daily conditions, UV index)
 
 Published on Google Play (package `com.vortex.astro`). The desktop (Electron) app has been removed; this project is mobile/Android only.
+- **GitHub repo (public):** `https://github.com/chamarawickramarathne-spec/astroset`
+- **Privacy Policy:** `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
+- **Current status:** Play Console submission ready (Mod 037); awaiting user to create app and upload AAB.
 
 ## Tech Stack
 - **Mobile (Android):** React Native + Expo (single flat project, no monorepo)
@@ -35,6 +38,7 @@ astroset/
 │   ├── tablet7/          # Play Store 7-inch tablet screenshots
 │   └── tablet10/         # Play Store 10-inch tablet screenshots
 ├── media/                # Icons, logos, screenshots
+├── privacy-policy/       # Privacy Policy HTML source (deployed on gh-pages branch)
 ├── patches/              # pnpm patches (expo-modules-core worklet fix)
 ├── AGENTS.md
 ├── AGENTS_PLAN.md
@@ -877,6 +881,7 @@ ode_modules/expo/AppEntry.js which no longer exists in Expo SDK 52
 - Committed the full Mod 036-037 changeset (flatten + rebuild + Play prep docs) to Git.
 - Pushed repo to a **public** GitHub repository (`chamarawickramarathne-spec/astroset`, required public for free-plan GitHub Pages) and published the ad-free Privacy Policy via GitHub Pages from a `gh-pages` branch.
 - Privacy Policy URL: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html` — this is the Play Console store listing URL.
+- Play Console runbook provided to user (create app, store listing, data safety, content rating, upload AAB + mapping.txt).
 
 **Files/Components:**
 - `release/AstroSet-android.apk`, `release/AstroSet-android.aab`, `release/AstroSet-android-mapping.txt` (rebuilt)
