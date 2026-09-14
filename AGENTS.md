@@ -874,14 +874,18 @@ ode_modules/expo/AppEntry.js which no longer exists in Expo SDK 52
 **Changes:**
 - Rebuilt signed release AAB/APK/mapping.txt from the flattened source (same runtime version 1.3.1, versionCode 8); old Mod 035 build artifacts in `release/` were from pre-flatten code and must not be used for Play submission.
 - Published a fresh OTA update (`eas update --channel default`, environment production) so the runtime fingerprint matches the rebuilt native build — all future JS-only changes can now ship without a Play Store rebuild.
-- Pushed repo to a private GitHub repository (owner `kogn12`) and published the ad-free Privacy Policy to GitHub Pages at `https://kogn12.github.io/astroset/privacy.html`; the Play Console store listing will use this URL.
-- Hand off: Play Console runbook provided to user (store listing, data safety, content rating, AAB upload steps).
+- Committed the full Mod 036-037 changeset (flatten + rebuild + Play prep docs) to Git.
+- Pushed repo to a **public** GitHub repository (`chamarawickramarathne-spec/astroset`, required public for free-plan GitHub Pages) and published the ad-free Privacy Policy via GitHub Pages from a `gh-pages` branch.
+- Privacy Policy URL: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html` — this is the Play Console store listing URL.
 
 **Files/Components:**
 - `release/AstroSet-android.apk`, `release/AstroSet-android.aab`, `release/AstroSet-android-mapping.txt` (rebuilt)
-- GitHub Pages: `https://kogn12.github.io/astroset/privacy.html`
+- `privacy-policy/privacy.html` (source), deployed on `gh-pages` branch
+- GitHub Pages: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
 
 **Important Notes:**
-- The privacy policy URL is `https://kogn12.github.io/astroset/privacy.html`; this goes in the Play Console store listing and Data safety form.
+- The privacy policy URL is `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`; this goes in the Play Console store listing and Data safety form.
+- The repo is **public** (GitHub Pages free plan requires public repos for project pages). Consider adding `.gitignore` rules for local build artifacts before the repo gained visibility.
 - The new AAB embeds the runtime fingerprint that matches the OTA update published in this modification. Any subsequent `eas update` will apply to devices running this build automatically on launch.
 - Keystore unchanged (same `astroset2026` / `astroset-release` upload key from Mod 034; Play App Signing takes over once uploaded to Play Console).
+- Build was killed by a 30-min tool timeout on first attempt (gradle daemon completed but pipe buffering delayed output). On second attempt, build completed successfully in ~15 min; the 30-min timeout is sufficient for fresh builds.

@@ -2,19 +2,22 @@
 
 ## Current Track
 Google Play submission. The app is a single flat Expo project (Mod 036).
-Sequence: update plan → commit Mod 036 → rebuild signed AAB/APK → consolidate to release/ →
-host Privacy Policy on GitHub Pages → publish matching OTA update → hand off Play Console runbook.
+All build/push/OTA/docs work is done (Mod 037). Only the handoff Play Console runbook is pending.
+
+Privacy Policy hosted at: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
+GitHub repo (public): `https://github.com/chamarawickramarathne-spec/astroset`
+OTA: published Android group `62e3d8d6` (runtime `bdd056be`) on `default` channel.
 
 ## In Progress (Mod 037)
-- [ ] Update AGENTS_PLAN.md + AGENTS.md (Mod 037 docs)
-- [ ] Commit Mod 036 flat-project restructuring
-- [ ] Rebuild signed AAB/APK from flattened source (gradlew bundleRelease + assembleRelease)
-- [ ] Verify AAB: package com.vortex.astro, versionCode 8 / "1.3.1", no ads libs, targetSdk 36
-- [ ] Consolidate new AAB/APK/mapping.txt into root release/
-- [ ] Create private GitHub repo + push + publish Privacy Policy via GitHub Pages
-- [ ] Confirm privacy policy URL live
-- [ ] Publish OTA update (eas update --channel default) after rebuild
-- [ ] Commit Mod 037 work
+- [x] Update AGENTS_PLAN.md + AGENTS.md (Mod 037 docs)
+- [x] Commit Mod 036 flat-project restructuring
+- [x] Rebuild signed AAB/APK from flattened source (gradlew bundleRelease + assembleRelease)
+- [x] Verify AAB: package com.vortex.astro, versionCode 8 / "1.3.1", no ads libs, targetSdk 36
+- [x] Consolidate new AAB/APK/mapping.txt into root release/
+- [x] Create GitHub repo `chamarawickramarathne-spec/astroset` (public, free plan) + push + Privacy Policy published via GitHub Pages from `gh-pages` branch
+- [x] Confirm privacy policy URL live: `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`
+- [x] Publish OTA update (eas update --channel default, Android group 62e3d8d6) after rebuild
+- [x] Commit Mod 037 work
 - [ ] Hand off Play Console runbook (user: create app, store listing, data safety, content rating, upload AAB)
 
 ## In Progress
@@ -95,6 +98,7 @@ host Privacy Policy on GitHub Pages → publish matching OTA update → hand off
 - [x] AdMob removed (Mod 034): deleted ads.ts + AdBanner.tsx, stripped all screen usages, removed dep + plugin + manifest meta-data; versionName 1.3.0 -> 1.3 and versionCode 6 -> 7 (fixed trailing .0 rejection); NEW keystore generated (old lost to prebuild); re-applied signing + R8 + wrapper 8.14.3; rebuilt signed AAB/APK, verified no ads code in bundle; privacy policy rewritten ad-free; consolidated to release/
 - [x] EAS Update (OTA) integration (Mod 035): expo-updates installed, EAS project linked, app.json updates/fingerprint config, eas.json created, native regenerated + wipe list re-applied, version 1.3.1 / versionCode 8, initial OTA published to default channel, Git repo initialized + first commit
 - [x] Monorepo flattened to a single Expo project (Mod 036): apps/mobile + packages/core moved to repo root, `@astroset/core` imports rewritten to relative `../src/core`, tsconfig paths removed, react-navigation dropped (useFocusEffect now from expo-router), pnpm-workspace.yaml/turbo.json/tsconfig.base.json deleted, root package.json is the app manifest, fresh install + typecheck + Metro export verified
+- [x] Play Store prep (Mod 037): rebuilt signed AAB/APK/mapping.txt from flattened source; committed full changeset; created public GitHub repo `chamarawickramarathne-spec/astroset`; published Privacy Policy via GitHub Pages at `https://chamarawickramarathne-spec.github.io/astroset/privacy.html`; published OTA update (group 62e3d8d6, runtime bdd056be, default channel); all files verified (package, versionCode 8, targetSdk 36, no ads, correct keystore)
 
 ## Pending / Blocking for Play resubmission
 - [ ] Play Console: fill Data safety form, content rating, store listing (user, manual)
