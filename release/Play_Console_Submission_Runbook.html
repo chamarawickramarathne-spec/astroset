@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroSet — Play Console Submission Runbook</title>
+<style>
+  :root {
+    --bg: #0d0d1f;
+    --panel: #161633;
+    --panel2: #1d1d3f;
+    --border: #2e2e52;
+    --text: #e8e8f6;
+    --muted: #9a9ac0;
+    --accent: #8b7cf6;
+    --solar: #f59e0b;
+    --astro: #a78bfa;
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --danger: #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    padding: 2rem 1rem;
+  }
+  .container { max-width: 980px; margin: 0 auto; }
+  header { text-align: center; padding-bottom: 2rem; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+  h1 { font-size: 2rem; color: #fff; margin-bottom: .5rem; }
+  .subtitle { color: var(--muted); font-size: 1.05rem; }
+  .badges { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+  .badge {
+    background: var(--panel2); border: 1px solid var(--border);
+    padding: .35rem .8rem; border-radius: 999px; font-size: .85rem; color: var(--muted);
+  }
+  .badge.ok { color: var(--ok); border-color: var(--ok); }
+  .badge.solar { color: var(--solar); border-color: var(--solar); }
+  .progress {
+    margin-top: .9rem; max-width: 480px; margin-inline: auto;
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 999px; padding: .35rem .9rem;
+    color: var(--ok); font-size: .9rem;
+  }
+  section {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
+    padding: 1.6rem 1.8rem; margin-bottom: 1.4rem;
+  }
+  h2 {
+    font-size: 1.35rem; color: var(--accent); margin-bottom: 1rem;
+    padding-bottom: .5rem; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: .6rem;
+  }
+  h2 .step-num {
+    background: var(--accent); color: #fff; width: 30px; height: 30px;
+    border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-size: .95rem; flex-shrink: 0;
+  }
+  h3 { font-size: 1.05rem; color: #fff; margin: 1.1rem 0 .5rem; }
+  p { margin-bottom: .6rem; }
+  ul, ol { margin: .4rem 0 .9rem 1.4rem; }
+  li { margin-bottom: .35rem; }
+  code, .path {
+    font-family: Consolas, "Courier New", monospace;
+    background: var(--panel2); border: 1px solid var(--border);
+    padding: .1rem .4rem; border-radius: 5px; font-size: .88em; color: var(--solar);
+    word-break: break-all;
+  }
+  .path { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: .7rem 0 1rem; font-size: .93rem; }
+  th, td { text-align: left; padding: .55rem .7rem; border: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--panel2); color: var(--accent); font-weight: 600; }
+  tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+  .copy {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1rem 1.2rem; margin: .6rem 0; font-size: .92rem; white-space: pre-wrap;
+  }
+  .copy.label { font-size: .78rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding-bottom: .2rem; }
+  .callout {
+    border-left: 4px solid var(--solar); background: var(--panel2);
+    padding: .8rem 1rem; border-radius: 0 10px 10px 0; margin: .8rem 0;
+  }
+  .callout.ok { border-color: var(--ok); }
+  .callout.warn { border-color: var(--warn); }
+  .callout.danger { border-color: var(--danger); }
+  .callout strong { color: var(--solar); }
+  .callout.ok strong { color: var(--ok); }
+  .callout.warn strong { color: var(--warn); }
+  .callout.danger strong { color: var(--danger); }
+  .checkbox-list li { list-style: none; margin-left: 0; padding-left: 1.7rem; position: relative; }
+  .checkbox-list li::before {
+    content: ""; position: absolute; left: 0; top: .3rem;
+    width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 5px;
+    background: var(--panel2);
+  }
+  details { border: 1px solid var(--border); border-radius: 10px; padding: .6rem 1rem; margin: .6rem 0; background: var(--panel2); }
+  summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  details p, details ul { margin-top: .5rem; }
+  footer { text-align: center; color: var(--muted); font-size: .85rem; margin-top: 2.5rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid2 section { margin-bottom: .4rem; }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Play Console Submission Runbook</h1>
+    <div class="subtitle">AstroSet v1.3.1 &middot; package <code>com.vortex.astro</code> &middot; generated 14 Sep 2026</div>
+    <div class="badges">
+      <span class="badge ok">AAB built &amp; signed</span>
+      <span class="badge ok">OTA published</span>
+      <span class="badge ok">Privacy Policy live</span>
+      <span class="badge ok">Repo public</span>
+      <span class="badge solar">Awaiting: your Play Console actions</span>
+    </div>
+    <div class="progress">Status: <b>READY TO UPLOAD</b> — everything technical is done. Follow steps below in order.</div>
+  </header>
+
+  <!-- ===================== WHAT'S READY ===================== -->
+  <section>
+    <h2>What Is Already Done</h2>
+    <table>
+      <tbody>
+        <tr><td><b>Signed AAB</b></td><td class="path">release/AstroSet-android.aab</td><td>68.5 MB — this is what you upload to Play Console</td></tr>
+        <tr><td><b>APK</b></td><td class="path">release/AstroSet-android.apk</td><td>93 MB — for sideload / internal testing</td></tr>
+        <tr><td><b>Mapping / deobfuscation</b></td><td class="path">release/AstroSet-android-mapping.txt</td><td>54.7 MB — upload in the release section for readable crash reports</td></tr>
+        <tr><td><b>Privacy Policy</b></td><td class="path">https://chamarawickramarathne-spec.github.io/astroset/privacy.html</td><td>Live, ad-free, hosted on GitHub Pages</td></tr>
+        <tr><td><b>Screenshots &amp; graphics</b></td><td class="path">release/phone, release/tablet7, release/tablet10, release/feature_graphic.png</td><td>All required sizes</td></tr>
+        <tr><td><b>Listing copy</b></td><td class="path">medial_support.txt</td><td>Short/long descriptions, tags, Facebook post</td></tr>
+        <tr><td><b>CRITICAL config</b></td><td>versionName <code>1.3.1</code>, versionCode <code>8</code></td><td>No trailing <code>.0</code> in version name (Play requirement)</td></tr>
+      </tbody>
+    </table>
+    <div class="callout ok"><strong>No ads, no data collection.</strong> AstroSet is completely ad-free and stores all user data locally on-device (location/zodiac prefs, cached data). The Play Console Data Safety form should say <b>"no data collected"</b> — nothing to declare.</div>
+  </section>
+
+  <!-- ===================== QUICK LINKS ===================== -->
+  <section>
+    <h2>Quick Links</h2>
+    <table>
+      <tbody>
+        <tr><td>Play Console</td><td><code>https://play.google.com/console</code></td></tr>
+        <tr><td>Privacy Policy URL (for store listing &amp; Data Safety)</td><td><code>https://chamarawickramarathne-spec.github.io/astroset/privacy.html</code></td></tr>
+        <tr><td>GitHub repo</td><td><code>https://github.com/chamarawickramarathne-spec/astroset</code></td></tr>
+        <tr><td>Source privacy policy</td><td class="path">privacy-policy/privacy.html</td></tr>
+        <tr><td>Older full policy text</td><td class="path">release/PRIVACY_POLICY.md</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===================== STEP 1 ===================== -->
+  <section>
+    <h2><span class="step-num">1</span> Create the App in Play Console</h2>
+    <ol>
+      <li>Open <code>https://play.google.com/console</code> and sign in with the developer account.</li>
+      <li>Click <b>Create app</b>.</li>
+      <li>App name: <b>AstroSet</b></li>
+      <li>Default language: <b>English (United States)</b></li>
+      <li>App or game: <b>App</b></li>
+      <li>Free or paid: <b>Free</b></li>
+      <li>Check the checkbox on the right confirming you've read the <b>Target Audience Declaration</b> (a pop-up will appear — read and accept).</li>
+      <li>Click <b>Create app</b>.</li>
+    </ol>
+  </section>
+
+  <!-- ===================== STEP 2 ===================== -->
+  <section>
+    <h2><span class="step-num">2</span> Store Listing</h2>
+    <h3>App details</h3>
+    <ul>
+      <li>Full app name: <b>AstroSet</b></li>
+      <li>Short description (80 chars max): use the copy below</li>
+      <li>Full description (4000 chars max): use the copy below</li>
+      <li>Application type: <b>Application</b></li>
+      <li>Category: <b>Weather</b> (or Education — recommended: Weather)</li>
+      <li>Tags: add up to 5, e.g. <code>Astrology</code>, <code>Space weather</code>, <code>Horoscope</code></li>
+      <li>Contact email: as registered on the developer account</li>
+    </ul>
+
+    <div class="copy label">Short description (paste into "Short description")</div>
+    <div class="copy">Your daily guide to Vedic and Western astrology, planetary alignment charts, moon events, solar activity, space weather, and forecasts - all in one beautiful Android app.</div>
+
+    <div class="copy label">Full description (paste into "Full description")</div>
+    <div class="copy">AstroSet is a comprehensive daily events application that brings together astrology, planetary tracking, solar activity, space weather, and terrestrial forecasts to keep you informed about the cosmos and your environment. Available for Android mobile.
+
+Astrology Events:
+- Interactive Planetary Alignment Chart - a zodiac wheel showing live positions of all 10 planets (Sun through Pluto) with degrees, signs, and retrograde markers
+- Daily Vedic Panchang (tithi, nakshatra, karana)
+- Western daily horoscopes
+- Moon phases with precise illumination percentage and age
+- Upcoming Moon Events - full moons, new moons, quarters, perigee and apogee dates for the next 30 days
+- Upcoming Planetary Events - retrograde stations and sign ingresses for the next 30 days
+
+Solar & Space Weather:
+- Real-time solar flare detection from NOAA GOES-18 X-ray data with class magnitudes (C, M, X)
+- 7-day X-ray flux area chart with flare-class threshold lines on a log scale
+- Geomagnetic storm tracking (G1-G5 scale)
+- Kp index with severity indicators
+- Aurora visibility forecasts
+- Live solar wind speed, density, temperature, and IMF Bz (GSM) with sample timestamps
+- Schumann Resonance monitor - live Earth-ionosphere spectrogram from Tomsk State University plus a composite Activity Index (0-100) with plain-language interpretation
+
+Weather Forecasts:
+- 7-day detailed forecasts
+- UV index with safety level indicators
+- Precipitation chances and wind speed
+- Hourly forecast details
+
+Smart Features:
+- Automatic refresh every 30 minutes with countdown
+- Offline caching - your last data is always available, even without internet
+- Automatic over-the-air updates - new features and fixes reach you instantly through EAS Update, no manual downloads needed
+- Your settings are saved - location, zodiac sign and preferences persist between sessions
+- Custom location settings with latitude/longitude
+- Clean dark-space themed interface
+- Pull-to-refresh on mobile
+- Built-in Privacy Policy screen
+
+AstroSet is designed for astrology enthusiasts, stargazers, aurora hunters, photographers planning golden-hour shoots, health-conscious users tracking UV exposure, and anyone curious about the connection between cosmic activity and daily life. Planetary positions and moon events are computed on-device with precision astronomy algorithms, while live space weather comes from NOAA Space Weather Prediction Center and NASA, weather from Open-Meteo, and horoscopes from dedicated astrology services. AstroSet is completely free to use with no ads.</div>
+
+    <h3>Graphics (upload in order)</h3>
+    <table>
+      <tbody>
+        <tr><th>Field</th><th>File</th><th>Notes</th></tr>
+        <tr><td>Feature graphic</td><td class="path">release/feature_graphic.png</td><td>1024&times;500 px</td></tr>
+        <tr><td>Phone screenshots</td><td class="path">release/phone/playstore_today.png</td><td>1080&times;1920</td></tr>
+        <tr><td>Phone screenshots</td><td class="path">release/phone/playstore_solar.png</td><td>1080&times;1920</td></tr>
+        <tr><td>Phone screenshots</td><td class="path">release/phone/playstore_weather.png</td><td>1080&times;1920</td></tr>
+        <tr><td>7" tablet</td><td class="path">release/tablet7/tablet7_today.png</td><td>1080&times;1920</td></tr>
+        <tr><td>7" tablet</td><td class="path">release/tablet7/tablet7_solar.png</td><td>1080&times;1920</td></tr>
+        <tr><td>7" tablet</td><td class="path">release/tablet7/tablet7_weather.png</td><td>1080&times;1920</td></tr>
+        <tr><td>7" tablet</td><td class="path">release/tablet7/tablet7_settings.png</td><td>1080&times;1920</td></tr>
+        <tr><td>10" tablet</td><td class="path">release/tablet10/tablet10_today.png</td><td>1600&times;2560</td></tr>
+        <tr><td>10" tablet</td><td class="path">release/tablet10/tablet10_solar.png</td><td>1600&times;2560</td></tr>
+        <tr><td>10" tablet</td><td class="path">release/tablet10/tablet10_weather.png</td><td>1600&times;2560</td></tr>
+        <tr><td>10" tablet</td><td class="path">release/tablet10/tablet10_settings.png</td><td>1600&times;2560</td></tr>
+        <tr><td>App icon</td><td class="path">assets/icon.png</td><td>Automatically from the AAB; 512&times;512 acceptable</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- ===================== STEP 3 ===================== -->
+  <section>
+    <h2><span class="step-num">3</span> Data Safety</h2>
+    <div class="callout ok"><strong>Answer truthfully.</strong> AstroSet does NOT collect, share, or process personal data — it's all local.</div>
+    <ul>
+      <li>On the "Data safety" page, click <b>Start</b>.</li>
+      <li>Has your app collected data from users? → <b>No</b></li>
+      <li>Click <b>Next</b></li>
+      <li>Security practices: choose <b>No</b> for data sharing, encryption, and deletion sections that require collected data.</li>
+      <li>Data types: leave nothing selected.</li>
+      <li>Privacy policy URL: <code>https://chamarawickramarathne-spec.github.io/astroset/privacy.html</code></li>
+      <li>Save.</li>
+    </ul>
+    <div class="callout"><strong>Note:</strong> The app requests the <b>POST_NOTIFICATIONS</b> permission (for optional daily alerts). That's a runtime permission, not data collection, so nothing extra to declare.</div>
+  </section>
+
+  <!-- ===================== STEP 4 ===================== -->
+  <section>
+    <h2><span class="step-num">4</span> Content Rating (IARC)</h2>
+    <ul>
+      <li>Go to <b>App content</b> → <b>Content rating</b> → <b>Continue</b>.</li>
+      <li>Fill the IARC questionnaire with these answers:
+        <ul>
+          <li>Category: <b>Education</b> / general</li>
+          <li>No violence, no sexual content, no gambling, no user-generated content</li>
+          <li>Not directed at children under 13 (per privacy policy, but suitable for all ages)</li>
+        </ul>
+      </li>
+      <li>Submit the questionnaire — rating will be generated (expected: <b>Everyone / 3+</b>).</li>
+    </ul>
+  </section>
+
+  <!-- ===================== STEP 5 ===================== -->
+  <section>
+    <h2><span class="step-num">5</span> Target Audience &amp; Other App Content</h2>
+    <ul>
+      <li>Target audience: <b>All ages</b> / general audience.</li>
+      <li>Apps with ads → <b>No</b> (no ad SDKs present).</li>
+      <li>News app → <b>No</b>.</li>
+      <li>Data Safety declaration on this page should already match Step 3.</li>
+      <li>Government app → <b>No</b>.</li>
+    </ul>
+  </section>
+
+  <!-- ===================== STEP 6 ===================== -->
+  <section>
+    <h2><span class="step-num">6</span> Release Track &amp; Upload</h2>
+    <ol>
+      <li>Play Console menu: <b>Release &gt; Production</b> → <b>Create new release</b>.</li>
+      <li><b>(Recommended first)</b> Instead test privately first through <b>Release &gt; Testing &gt; Internal testing</b> → <b>Create new release</b>. This lets you install via <code>opt-in</code> link before public launch.</li>
+      <li>Upload the AAB: drag <code class="path">release/AstroSet-android.aab</code> into the App bundle drop zone.</li>
+      <li>Wait for the bundle to be processed; Play validates signing, format, and SDK levels.</li>
+      <li>Upload deobfuscation file: <code class="path">release/AstroSet-android-mapping.txt</code> — attach it next to the AAB (it un-hides R8-obfuscated stack traces in ANRs/crash reports).</li>
+      <li>Release name (optional): e.g. <code>1.3.1</code>.</li>
+      <li><b>Rollout:</b> internal testing → 100% of testers (you). Production rollout can be <b>0% staged</b> or 100%.</li>
+    </ol>
+    <div class="callout warn"><strong>Do NOT upload these:</strong> the Mod 035-era artifacts. Current build is <code>versionCode 8 / versionName 1.3.1</code>. Play rejects an upload with a lower versionCode than one already on the track.</div>
+    <div class="callout"><strong>Sign-in review:</strong> AstroSet has no sign-in. The "Sign-in with Google" section should auto-be marked as <b>No</b>, no action needed.</div>
+  </section>
+
+  <!-- ===================== STEP 7 ===================== -->
+  <section>
+    <h2><span class="step-num">7</span> Review &amp; Publish</h2>
+    <ol>
+      <li>Click <b>View release summary</b> and double-check country coverage, release notes, and bundle.</li>
+      <li>Add release notes (optional but recommended): <div class="copy">New: Vedic/Western astrology, planetary alignment chart, moon events, live solar flares & space weather, Schumann Resonance monitor, 7-day weather with UV index. Completely free with no ads.</div></li>
+      <li>When an internal-testing release is reviewed, you'll get an opt-in link like <code>https://play.google.com/apps/testing/com.vortex.astro</code> — open it on your phone, install, and verify the app launches and loads data.</li>
+      <li>Once verified, <b>Promote to production</b> or create a production release and <b>Roll out the release</b>.</li>
+      <li>Post-publish review typically takes a few hours to a few days. You can use the limited "test" release while reviewing.</li>
+    </ol>
+  </section>
+
+  <!-- ===================== STEP 8 ===================== -->
+  <section>
+    <h2><span class="step-num">8</span> After Publishing — Updating the App</h2>
+    <h3>JavaScript-only changes (no Play Store visit needed)</h3>
+    <div class="copy">Set EXPO_TOKEN (in credentials.txt), then from project root:
+eas update --channel default --environment production --message "what changed" --non-interactive</div>
+    <p>Installed apps fetch the new JS bundle automatically on launch (OTA via EAS Update).</p>
+    <h3>Native changes (requires a new Play release)</h3>
+    <ol>
+      <li>Bump <code>versionCode</code> and optionally <code>versionName</code> in <code class="path">app.json</code> and <code class="path">android/app/build.gradle</code>.</li>
+      <li>Rebuild: <code>.\android\gradlew.bat :app:assembleRelease :app:bundleRelease</code> (from project root).</li>
+      <li>Copy new files to <code class="path">release/</code>:</li>
+    </ol>
+    <div class="copy">Copy-Item .\android\app\build\outputs\apk\release\app-release.apk .\release\AstroSet-android.apk -Force
+Copy-Item .\android\app\build\outputs\bundle\release\app-release.aab .\release\AstroSet-android.aab -Force
+Copy-Item .\android\app\build\outputs\mapping\release\mapping.txt .\release\AstroSet-android-mapping.txt -Force</div>
+    <li>Upload the new AAB + mapping.txt to the Play track (must have higher versionCode).</li>
+  </section>
+
+  <!-- ===================== APP CONTENT Q&A ===================== -->
+  <section>
+    <h2>Fast Q&amp;A — Common Form Questions</h2>
+    <details>
+      <summary>Does the app collect personal data?</summary>
+      <p><b>No.</b> Settings (location, zodiac, notification prefs) and cached data live only on the device in AsyncStorage. There is no backend server.</p>
+    </details>
+    <details>
+      <summary>Does it have ads?</summary>
+      <p><b>No ads.</b> AdMob/Google Ads SDK was fully removed (Mod 034). The APK verification confirms zero <code>com.google.android.gms.ads</code> classes and no AdMob IDs.</p>
+    </details>
+    <details>
+      <summary>What permissions does it use?</summary>
+      <p><b>POST_NOTIFICATIONS</b> (optional daily notifications), RECEIVE_BOOT_COMPLETED (restore scheduled notifications after reboot), and internet access for live data. No location services, no camera, no contacts, no microphone.</p>
+    </details>
+    <details>
+      <summary>Which privacy policy URL goes in the store?</summary>
+      <p><code>https://chamarawickramarathne-spec.github.io/astroset/privacy.html</code></p>
+    </details>
+    <details>
+      <summary>Why versionName "1.3.1" and not "1.3.1.0"?</summary>
+      <p>Play rejects version names with a trailing <code>.0</code>. Keep the current format; PSB already handles this.</p>
+    </details>
+    <details>
+      <summary>What if Play asks for a privacy policy on the data safety page?</summary>
+      <p>Paste the same GitHub Pages URL above. It's ad-free and hosted on the public repo.</p>
+    </details>
+  </section>
+
+  <!-- ===================== TROUBLESHOOTING ===================== -->
+  <section>
+    <h2>Troubleshooting &amp; Gotchas</h2>
+    <table>
+      <tbody>
+        <tr><th>Issue</th><th>Fix</th></tr>
+        <tr><td>"App bundle is invalid / lower versionCode"</td><td>You're uploading an old artifact. Use <code class="path">release/AstroSet-android.aab</code> (versionCode 8).</td></tr>
+        <tr><td>Build brings back old outputs</td><td>Confirm <code>android/app/build/outputs</code> timestamps are today and hash differs from the old one.</td></tr>
+        <tr><td>OTAs not applying on device</td><td>Runtime fingerprint changed → rebuild happened before publishing update. App must be re-installed from a build matching the OTA.</td></tr>
+        <tr><td>CRLF/long-path issues on rebuild</td><td>Use <code>.\android\gradlew.bat</code> from repo root; keep folder path short. If ninja errors, redo ninja 1.12.1 swap in the SDK.</td></tr>
+        <tr><td>Want to change screenshots</td><td>Regenerate from <code class="path">media/screenshots/take_screenshots.py</code> (Playwright), then re-upload.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    AstroSet &bull; Play Console Runbook &bull; 14 Sep 2026 &bull; Source: AGENTS.md (Mod 037) &amp; AGENTS_PLAN.md
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 {
   "name": "astroset",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "private": true,
   "description": "Daily astrology, solar events, and weather app (Android)",
   "main": "expo-router/entry",
